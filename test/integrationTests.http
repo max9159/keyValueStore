@@ -1,0 +1,10 @@
+### Home
+GET http://localhost:3000/
+
+### GET
+GET http://localhost:3000/api/store?key=2
+
+### POST
+POST http://localhost:3000/api/store
+
+{ "key": "3", "value": "value3"}
