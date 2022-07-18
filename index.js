@@ -1,7 +1,14 @@
 
 const http = require('http');
 const url = require('url');
+const { CacheConfig } = require('./config/cacheConfigs');
+const { FifoStrategy } = require('./service/fifoStrategy');
+const { KeyValueStore } = require('./service/keyValueStore');
+const { StoreService } = require('./service/storeService');
 const PORT = 3000;
+// Can inject another Strategy CacheService
+const cacheService = CacheConfig.REPLACEMENT_POLICY === 'FIFO' ? new FifoStrategy(): undefined;
+const keyValueStore = new KeyValueStore(new StoreService(), cacheService);
 
 const server = http.createServer((req, res) => {
   console.log(`Method: ${req.method} ${req.url}`);
@@ -9,24 +16,24 @@ const server = http.createServer((req, res) => {
 
   if (req.url.toLowerCase().includes('/api/store')) {
     if (req.method === 'GET') {
+
       const queryObject = url.parse(req.url.toLowerCase(), true).query;
-
-      // TODO: Add KevValueStore.get(key);
-      // const result = { key: queryObject.key, value: 'testVal' }; 
-
+      const result = keyValueStore.get(queryObject.key);
       res.end(JSON.stringify(result));
+
     } else if (req.method === 'POST') {
+
       let data = '';
       req.on('data', chunk => {
         data += chunk;
       });
       req.on('end', () => {
+
         console.log(`POST Body:${data}`);
+        const updateObject = JSON.parse(data);
+        keyValueStore.set(updateObject.key, updateObject.value);
 
-        // TODO: Add KevValueStore.set(data)
-        // const updateObject = JSON.parse(data);
-
-        res.end();
+        res.end('Successfully updated');
       });
     }
   } else {
