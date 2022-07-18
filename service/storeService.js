@@ -12,11 +12,14 @@ class StoreService {
   }
 
   set(key, value) {
-    this._data[key] = value;
+    return new Promise((resolve, reject) => {
+      this._data[key] = value;
+      resolve(true);
+    });
   }
 
 }
 
 module.exports = {
- StoreService,
+  StoreService,
 }
