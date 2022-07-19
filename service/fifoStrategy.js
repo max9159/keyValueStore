@@ -20,8 +20,13 @@ class FifoStrategy {
   }
 
   getByteSize(str) {
-    const bytes = Buffer.byteLength(str, "ascii");
-    return bytes;
+    try {
+      const bytes = Buffer.byteLength(str, "ascii");
+      return bytes;
+      
+    } catch (error) {
+      return 0;
+    }
   };
 
   validateSize(key, value) {
