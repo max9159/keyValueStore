@@ -24,9 +24,25 @@ curl --location --request GET "http://localhost:3000/api/store?key=3"
 curl --location --request POST "http://localhost:3000/api/store" --header "Content-Type: application/json" --data-raw "{ \"key\": \"3\", \"value\": \"value3\"}"
 
 ```
-## Tests
+## Unit-Tests
 - Run testing command.
-- All of test cases in !(keyValueStore.test.js)[]
 ```bash
 npm run test
 ```
+- All of test cases in [keyValueStore.test](./test/keyValueStore.test.js)
+
+## API-Tests
+  - [integrationTests.http](./test/integrationTests.http)
+  - Use above http file via plugin can send HTTP request such as [HTTP Client of IntelliJ](https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html) or [REST Client of VSCode Extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
+
+## Configuration
+- [cacheConfigs](./config/cacheConfigs.js)
+  - Can setup cache service's **MAXIMUM_BYTES_SIZE** and **REPLACEMENT_POLICY**
+  - Currently supports **FIFO**, can add new strategy and implement the same as interface of [fifoStrategy.js](./service/fifoStrategy.js)
+
+## Lock in NodeJS
+- To prevent race condition the **KeyValueStore** implement lock mechanism in [Locker](./util/locker.js)
+
+## Mock Data
+- Mock data has been generated in the constructor of the [storeService](./service/storeService.js).
+- The [storeService](./service/storeService.js) to pretend to be a DataBase store service.
