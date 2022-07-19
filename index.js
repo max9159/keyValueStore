@@ -7,9 +7,10 @@ const { KeyValueStore } = require('./service/keyValueStore');
 const { StoreService } = require('./service/storeService');
 const PORT = 3000;
 // Can inject another Strategy CacheService
-const cacheService = CacheConfig.REPLACEMENT_POLICY === 'FIFO' ? new FifoStrategy(): undefined;
+const cacheService = CacheConfig.REPLACEMENT_POLICY === 'FIFO' ? new FifoStrategy() : undefined;
 const keyValueStore = new KeyValueStore(new StoreService(), cacheService);
 
+// A API Service to invoke KeyValueStore
 const server = http.createServer((req, res) => {
   console.log(`Method: ${req.method} ${req.url}`);
   res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -28,12 +29,18 @@ const server = http.createServer((req, res) => {
         data += chunk;
       });
       req.on('end', () => {
-
         console.log(`POST Body:${data}`);
-        const updateObject = JSON.parse(data);
-        keyValueStore.set(updateObject.key, updateObject.value);
 
-        res.end('Successfully updated');
+        try {
+          const updateObject = JSON.parse(data);
+          keyValueStore.set(updateObject.key, updateObject.value);
+          res.end('Successfully updated');
+
+        } catch {
+          res.writeHead(400, { 'Content-Type': 'text/plain' });
+          res.end('Bad Request');
+        }
+
       });
     }
   } else {
