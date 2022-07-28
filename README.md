@@ -1,6 +1,10 @@
 # KeyValueStore
-> The **KeyValueStore** is a key-value in-memory store service written in NodeJS programming language. 
+> The **KeyValueStore** is a key-value in-memory store service with cache mechanism written in NodeJS programming language. 
+
+> It including a fake store service getting data from DataBase (Mock data would be generated in-memory) and cache mechanism to practice any design-patten.
+
 > Currently, it supports the thread-safe with Locks and cache replacement policy FIFO (Also flexible to change policy by injection).
+
 
 ## Installation
 - Ensure you have install NodeJS.
