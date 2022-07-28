@@ -1,6 +1,6 @@
 # KeyValueStore
 > The **KeyValueStore** is a key-value in-memory store service written in NodeJS programming language. 
-> Currently, it supports cache replacement policy FIFO and also flexible to change policy by injection.
+> Currently, it supports the thread-safe with Locks and cache replacement policy FIFO (Also flexible to change policy by injection).
 
 ## Installation
 - Ensure you have install NodeJS.
